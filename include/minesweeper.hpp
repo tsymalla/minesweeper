@@ -4,6 +4,7 @@
 #include <iostream>
 #include "game.hpp"
 #include "renderer.hpp"
+#include "gui.hpp"
 
 class Minesweeper
 {
@@ -12,6 +13,7 @@ class Minesweeper
     constexpr static int CELL_HEIGHT = 16;
     
     Renderer _renderer;
+    GUI _gui;
     Game _game;
     bool _isRunning;
     

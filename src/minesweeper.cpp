@@ -12,7 +12,12 @@ Minesweeper::~Minesweeper()
 
 bool Minesweeper::init(unsigned int width, unsigned int height)
 {
-    if (!_renderer.init(width * CELL_WIDTH, height * CELL_HEIGHT))
+    const int screenWidth = width * CELL_WIDTH;
+    const int screenHeight = height * CELL_HEIGHT;
+    
+    _gui.init(_renderer, screenWidth, screenHeight);
+    
+    if (!_renderer.init(screenWidth, _gui.getScoresPanelHeight() + screenHeight))
     {
         return false;
     }
@@ -41,7 +46,8 @@ void Minesweeper::tick()
             else if (e.type == SDL_MOUSEBUTTONDOWN)
             {
                 int tileX = mouseX / CELL_WIDTH;
-                int tileY = mouseY / CELL_HEIGHT;
+                int tileY = ((mouseY - _gui.getScoresPanelHeight()) / CELL_HEIGHT);
+                
                 std::vector<int> trackedCells;
                 
                 bool hasMine = _game.openGameCell(tileX, tileY, false, trackedCells);
@@ -66,11 +72,14 @@ void Minesweeper::tick()
         {
             for (auto y = 0; y < _game.getHeight(); ++y)
             {
+                const int xCoord = x * CELL_WIDTH;
+                const int yCoord = _gui.getScoresPanelHeight() + (y * CELL_HEIGHT);
+                
                 GameCell cell = _game.getGameCell(x, y);
                 
                 if (!cell.isOpen())
                 {
-                    _renderer.drawTile(x * CELL_WIDTH, y * CELL_HEIGHT,
+                    _renderer.drawTile(xCoord, yCoord,
                                        CELL_WIDTH,
                                        CELL_HEIGHT,
                                        Renderer::TILE::CLOSED);
@@ -79,16 +88,14 @@ void Minesweeper::tick()
                 {
                     if (!cell.hasMine())
                     {
-                        _renderer.drawTile(x * CELL_WIDTH,
-                                           y * CELL_HEIGHT,
+                        _renderer.drawTile(xCoord, yCoord,
                                            CELL_WIDTH,
                                            CELL_HEIGHT,
                                            Renderer::TILE::OPEN);
                     }
                     else
                     {
-                        _renderer.drawTile(x * CELL_WIDTH,
-                                           y * CELL_HEIGHT,
+                        _renderer.drawTile(xCoord, yCoord,
                                            CELL_WIDTH,
                                            CELL_HEIGHT,
                                            Renderer::TILE::MINE);
@@ -96,6 +103,8 @@ void Minesweeper::tick()
                 }
             }
         }
+        
+        _gui.drawScoresPanel(_game.getScore());
         
         _renderer.present();
     }

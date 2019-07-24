@@ -2,7 +2,7 @@
 #include <random>
 #include <algorithm>
 
-Game::Game(): _width(0), _height(0), _totalMineCount(0)
+Game::Game(): _width(0), _height(0), _totalMineCount(0), _currentScore(0)
 {
 }
 
@@ -137,6 +137,7 @@ bool Game::openGameCell(int x, int y, bool isNeighbour, std::vector<int>& tracke
     else
     {
         _gameField[index]._data |= MASK_FIELD_IS_OPEN;
+        _currentScore++;
     }
     
     ret = false;
@@ -156,11 +157,9 @@ bool Game::openGameCell(int x, int y, bool isNeighbour, std::vector<int>& tracke
     return ret;
 }
 
-GameCell* Game::getGameField() const
-{
-    return _gameField;
-}
-
+/*
+Uncover all fields
+*/
 void Game::_gameOver()
 {
     for (unsigned int index = 0; index < _width * _height; ++index)
@@ -170,4 +169,9 @@ void Game::_gameOver()
             _gameField[index]._data |= MASK_FIELD_IS_OPEN;
         }
     }
+}
+
+int Game::getScore() const
+{
+    return _currentScore;
 }

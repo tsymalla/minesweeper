@@ -36,6 +36,7 @@ class Game
     int _width;
     int _height;
     int _totalMineCount;
+    int _currentScore;
     GameCell* _gameField;
     
     void _initializeField();
@@ -56,7 +57,7 @@ class Game
     
     GameCell getGameCell(int x, int y) const;
     bool openGameCell(int x, int y, bool isNeighbour, std::vector<int>& trackedCells);
-    GameCell* getGameField() const;
+    int getScore() const;
 };
 
 #endif

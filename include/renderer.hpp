@@ -15,11 +15,12 @@ class Renderer
     SDL_Window* _window;
     SDL_Renderer* _renderer;
     SDL_Texture* _tiles;
-    constexpr static unsigned int TILE_SIZE = 16;
     
     bool _loadTiles();
     
     public:
+    constexpr static unsigned int TILE_SIZE = 16;
+    
     enum TILE: int
     {
         CLOSED = 0,
@@ -32,7 +33,8 @@ class Renderer
         LEFT = 7,
         RIGHT = 8,
         TOP = 9,
-        BOTTOM = 10
+        BOTTOM = 10,
+        EMPTY = 11
     };
     
     Renderer();
