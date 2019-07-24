@@ -95,8 +95,6 @@ void Minesweeper::tick()
                     }
                 }
             }
-            
-            //std::cout << std::endl;
         }
         
         _renderer.present();
