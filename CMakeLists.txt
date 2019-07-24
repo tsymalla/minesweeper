@@ -1,0 +1,19 @@
+project (Minesweeper)
+
+cmake_minimum_required (VERSION 3.1)
+
+file (GLOB SOURCES "src/*.cpp")
+add_executable (${PROJECT_NAME} ${SOURCES})
+
+set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
+
+find_package (SDL2 REQUIRED)
+find_package (SDL2_image REQUIRED)
+
+include_directories (include)
+include_directories (${PROJECT_NAME} ${SDL2_INCLUDE_DIRS})
+include_directories (${PROJECT_NAME} ${SDL2_IMAGE_DIRS})
+
+configure_file(tiles.png tiles.png COPYONLY)
+
+target_link_libraries (${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
