@@ -92,27 +92,27 @@ void Renderer::clear() const
     SDL_RenderClear(_renderer);
 }
 
-void Renderer::drawTile(int x, int y, int width, int height,  TILE tile)
+void Renderer::drawTile(int x, int y, int width, int height, TILE tile)
 {
     SDL_Rect src = {tile * TILE_SIZE, 0, 16, 16};
     SDL_Rect dst = {x, y, width, height};
     SDL_RenderCopy(_renderer, _tiles,  &src, &dst);
 }
 
-void Renderer::drawSolidRectangle(unsigned int x,
-                                  unsigned int y,
-                                  unsigned int width,
-                                  unsigned int height) const
+void Renderer::drawSolidRectangle(int x,
+                                  int y,
+                                  int width,
+                                  int height) const
 {
     SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
     SDL_Rect rect = {x, y, width, height};
     SDL_RenderDrawRect(_renderer, &rect);
 }
 
-void Renderer::drawFilledRectangle(unsigned int x,
-                                   unsigned int y,
-                                   unsigned int width,
-                                   unsigned int height,
+void Renderer::drawFilledRectangle(int x,
+                                   int y,
+                                   int width,
+                                   int height,
                                    int r,
                                    int g,
                                    int b,

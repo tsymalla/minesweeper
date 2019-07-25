@@ -19,7 +19,7 @@ class Renderer
     bool _loadTiles();
     
     public:
-    constexpr static unsigned int TILE_SIZE = 16;
+    constexpr static int TILE_SIZE = 16;
     
     enum TILE: int
     {
@@ -48,8 +48,8 @@ class Renderer
     void clear() const;
     
     void drawTile(int x, int y, int width, int height, TILE tile);
-    void drawSolidRectangle(unsigned int x, unsigned int y, unsigned int width, unsigned int height) const;
-    void drawFilledRectangle(unsigned int x, unsigned int y, unsigned int width, unsigned int height,
+    void drawSolidRectangle(int x, int y, int width, int height) const;
+    void drawFilledRectangle(int x, int y, int width, int height,
                              int r = 255,
                              int g = 255,
                              int b = 255,
