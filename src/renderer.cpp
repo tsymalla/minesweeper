@@ -17,11 +17,23 @@ Renderer::~Renderer()
         _tiles = nullptr;
     }
     
-    SDL_DestroyRenderer(_renderer);
-    _renderer = nullptr;
+    if (_font != nullptr)
+    {
+        FC_FreeFont(_font);
+        _font = nullptr;
+    }
     
-    SDL_DestroyWindow(_window);
-    _window = nullptr;
+    if (_renderer != nullptr)
+    {
+        SDL_DestroyRenderer(_renderer);
+        _renderer = nullptr;
+    }
+    
+    if (_window != nullptr)
+    {
+        SDL_DestroyWindow(_window);
+        _window = nullptr;
+    }
 }
 
 bool Renderer::init(unsigned int width, unsigned int height)
@@ -35,7 +47,7 @@ bool Renderer::init(unsigned int width, unsigned int height)
         return false;
     }
     
-    _window = SDL_CreateWindow("Minesweeper",
+    _window = SDL_CreateWindow("RetroSweeper",
                                SDL_WINDOWPOS_UNDEFINED,
                                SDL_WINDOWPOS_UNDEFINED,
                                width,
@@ -44,7 +56,7 @@ bool Renderer::init(unsigned int width, unsigned int height)
     
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
     
-    if (!_renderer)
+    if (_renderer == nullptr)
     {
         PRINT_SDL_ERROR;
         return false;
@@ -62,6 +74,19 @@ bool Renderer::init(unsigned int width, unsigned int height)
         return false;
     }
     
+    _font = FC_CreateFont();
+    FC_LoadFont(_font,
+                _renderer,
+                "early_gameboy.ttf",
+                16,
+                FC_MakeColor(139, 149, 109, 255),
+                TTF_STYLE_NORMAL);
+    
+    if (_font == nullptr)
+    {
+        return false;
+    }
+    
     return true;
 }
 
@@ -69,14 +94,14 @@ bool Renderer::_loadTiles()
 {
     SDL_Surface* img = IMG_Load("tiles.png");
     
-    if (!img)
+    if (img == nullptr)
     {
         return false;
     }
     
     _tiles = SDL_CreateTextureFromSurface(_renderer, img);
     
-    if (!_tiles)
+    if (_tiles == nullptr)
     {
         return false;
     }
@@ -92,7 +117,11 @@ void Renderer::clear() const
     SDL_RenderClear(_renderer);
 }
 
-void Renderer::drawTile(int x, int y, int width, int height, TILE tile)
+void Renderer::drawTile(int x,
+                        int y,
+                        int width,
+                        int height,
+                        TILE tile) const
 {
     SDL_Rect src = {tile * TILE_SIZE, 0, 16, 16};
     SDL_Rect dst = {x, y, width, height};
@@ -123,12 +152,14 @@ void Renderer::drawFilledRectangle(int x,
     SDL_RenderFillRect(_renderer, &rect);
 }
 
-/*
-void Renderer::drawText(SDL_Font* font, SDL_Rect dst,
-                        const std::string& text)
+
+void Renderer::drawText(int x,
+                        int y,
+                        const std::string& text) const
 {
+    FC_Draw(_font, _renderer, x, y, text.c_str());
 }
-*/
+
 
 void Renderer::present() const
 {

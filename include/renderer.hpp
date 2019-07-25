@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <map>
+#include "SDL_FontCache.h"
 #include <string>
 
 class Renderer
@@ -15,6 +15,7 @@ class Renderer
     SDL_Window* _window;
     SDL_Renderer* _renderer;
     SDL_Texture* _tiles;
+    FC_Font* _font;
     
     bool _loadTiles();
     
@@ -47,7 +48,7 @@ class Renderer
     
     void clear() const;
     
-    void drawTile(int x, int y, int width, int height, TILE tile);
+    void drawTile(int x, int y, int width, int height, TILE tile) const;
     void drawSolidRectangle(int x, int y, int width, int height) const;
     void drawFilledRectangle(int x, int y, int width, int height,
                              int r = 255,
@@ -55,7 +56,7 @@ class Renderer
                              int b = 255,
                              int a = 255) const;
     
-    //void drawText(SDL_Font* font, SDL_Rect dst, const std::string& text);
+    void drawText(int x, int y, const std::string& text) const;
     void present() const;
 };
 

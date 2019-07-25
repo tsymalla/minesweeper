@@ -69,10 +69,16 @@ void GUI::drawScoresPanel(int score) const
     {
         for (auto yPos = 1; yPos < PANEL_HEIGHT; ++yPos)
         {
-            _renderer->drawTile(xPos* Renderer::TILE_SIZE, yPos * Renderer::TILE_SIZE,
+            _renderer->drawTile(xPos * Renderer::TILE_SIZE, yPos * Renderer::TILE_SIZE,
                                 Renderer::TILE_SIZE,
                                 Renderer::TILE_SIZE,
                                 Renderer::TILE::EMPTY);
         }
     }
+    
+    _renderer->drawText(0 + Renderer::TILE_SIZE,
+                        (bottomY / 2), "RetroSweeper");
+    
+    _renderer->drawText((rightX / 2) + (2 * Renderer::TILE_SIZE),
+                        (bottomY / 2), "Score: " + std::to_string(score));
 }

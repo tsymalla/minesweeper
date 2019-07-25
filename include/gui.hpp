@@ -10,7 +10,7 @@ class GUI
     int _screenWidth;
     int _screenHeight;
     
-    constexpr static const int PANEL_HEIGHT = 4;
+    constexpr static const int PANEL_HEIGHT = 2;
     
     public:
     GUI();
