@@ -11,7 +11,13 @@ void Game::init(int width, int height)
     _width = width;
     _height = height;
     
-    _initializeField();
+    _initializeField(false);
+}
+
+void Game::restart()
+{
+    _currentScore = 0;
+    _initializeField(true);
 }
 
 Game::~Game()
@@ -23,9 +29,17 @@ Game::~Game()
     }
 }
 
-void Game::_initializeField()
+void Game::_initializeField(bool recreate)
 {
-    _gameField = new GameCell[_width * _height];
+    if (!recreate)
+    {
+        _gameField = new GameCell[_width * _height];
+    }
+    else
+    {
+        _refreshState();
+    }
+    
     std::random_device dev;
     std::mt19937 rng(dev());
     
@@ -38,6 +52,7 @@ void Game::_initializeField()
     {
         for (auto y = 0; y < _height; ++y)
         {
+            
             float random = dist(rng);
             
             if (random > 0.9f)
@@ -81,6 +96,15 @@ void Game::_calculateNeighbourMines(const int x, const int y)
     _gameField[y * _width + x]._neighbourMineCount = cellNeighbourMineCount;
 }
 
+void Game::_refreshState()
+{
+    // re-create all fields
+    for (auto i = 0; i < _width * _height; ++i)
+    {
+        _gameField[i]._neighbourMineCount = _gameField[i]._data = 0;
+    }
+}
+
 int Game::getWidth() const
 {
     return _width;
@@ -102,7 +126,7 @@ bool Game::openGameCell(int x, int y, bool isNeighbour, std::vector<int>& tracke
     
     if (index < 0 || index > (_width * _height))
     {
-        return true;
+        return false;
     }
     
     // stop recursion if necessary
@@ -113,7 +137,7 @@ bool Game::openGameCell(int x, int y, bool isNeighbour, std::vector<int>& tracke
         // neighbour cell was already processed
         if (it != trackedCells.end())
         {
-            return true;
+            return false;
         }
         
         trackedCells.push_back(index);
@@ -121,7 +145,7 @@ bool Game::openGameCell(int x, int y, bool isNeighbour, std::vector<int>& tracke
     
     if (_gameField[index].isOpen())
     {
-        return true;
+        return false;
     }
     
     bool ret = _gameField[index].hasMine();
@@ -131,7 +155,7 @@ bool Game::openGameCell(int x, int y, bool isNeighbour, std::vector<int>& tracke
         if (!isNeighbour)
         {
             _gameOver();
-            return false;
+            return true;
         }
     }
     else
@@ -140,21 +164,19 @@ bool Game::openGameCell(int x, int y, bool isNeighbour, std::vector<int>& tracke
         _currentScore++;
     }
     
-    ret = false;
-    
     if (_gameField[index]._neighbourMineCount == 0)
     {
-        ret |= openGameCell(x - 1, y, true, trackedCells);
-        ret |= openGameCell(x + 1, y, true, trackedCells);
-        ret |= openGameCell(x, y - 1, true, trackedCells);
-        ret |= openGameCell(x, y + 1, true, trackedCells);
-        ret |= openGameCell(x - 1, y - 1, true, trackedCells);
-        ret |= openGameCell(x - 1, y + 1, true, trackedCells);
-        ret |= openGameCell(x + 1, y - 1, true, trackedCells);
-        ret |= openGameCell(x + 1, y + 1, true, trackedCells);
+        openGameCell(x - 1, y, true, trackedCells);
+        openGameCell(x + 1, y, true, trackedCells);
+        openGameCell(x, y - 1, true, trackedCells);
+        openGameCell(x, y + 1, true, trackedCells);
+        openGameCell(x - 1, y - 1, true, trackedCells);
+        openGameCell(x - 1, y + 1, true, trackedCells);
+        openGameCell(x + 1, y - 1, true, trackedCells);
+        openGameCell(x + 1, y + 1, true, trackedCells);
     }
     
-    return ret;
+    return false;
 }
 
 /*

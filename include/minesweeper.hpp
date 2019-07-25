@@ -9,13 +9,27 @@
 class Minesweeper
 {
     private:
+    
+    enum GAMESTATE: int
+    {
+        GAME = 0,
+        GAMEOVER = 1
+    };
+    
     constexpr static int CELL_WIDTH = 16;
     constexpr static int CELL_HEIGHT = 16;
     
     Renderer _renderer;
     GUI _gui;
     Game _game;
+    int _screenWidth;
+    int _screenHeight;
+    
     bool _isRunning;
+    GAMESTATE _currentState;
+    void _restart();
+    void _drawGameField();
+    void _drawGameOver();
     
     public:
     Minesweeper();
@@ -25,7 +39,7 @@ class Minesweeper
     virtual ~Minesweeper();
     
     bool init(unsigned int width, unsigned int height);
-    void tick();
+    void run();
 };
 
 #endif

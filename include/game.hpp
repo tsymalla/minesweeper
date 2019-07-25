@@ -39,9 +39,10 @@ class Game
     int _currentScore;
     GameCell* _gameField;
     
-    void _initializeField();
+    void _initializeField(bool recreate);
     void _calculateNeighbourMines(const int x, const int y);
     void _gameOver();
+    void _refreshState();
     
     public:
     Game();
@@ -51,6 +52,7 @@ class Game
     virtual ~Game();
     
     void init(int width, int height);
+    void restart();
     
     int getWidth() const;
     int getHeight() const;

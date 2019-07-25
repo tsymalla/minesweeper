@@ -9,7 +9,7 @@ int main(int argc, char** argv)
         return -1;
     }
     
-    game.tick();
+    game.run();
     
     return 0;
 }
