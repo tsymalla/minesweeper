@@ -1,4 +1,4 @@
-# Retroweeper
+# RetroSweeper
 An implementation of the classical Minesweeper game using C++ and SDL2.
 Uses SDL_Image, SDL_TTF and SDL_FontCache as additional libraries.
 
