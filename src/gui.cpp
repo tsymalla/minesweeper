@@ -18,7 +18,7 @@ GUI::~GUI()
 
 int GUI::getScoresPanelHeight() const
 {
-    return PANEL_HEIGHT * Renderer::TILE_SIZE;
+    return (PANEL_HEIGHT + 1) * Renderer::TILE_SIZE;
 }
 
 void GUI::drawScoresPanel(int score) const

@@ -55,18 +55,20 @@ void Minesweeper::run()
                 {
                     SDL_GetMouseState(&mouseX, &mouseY);
                     
-                    int tileX = mouseX / CELL_WIDTH;
-                    int tileY = ((mouseY - _gui.getScoresPanelHeight()) / CELL_HEIGHT);
+					if (mouseY > _gui.getScoresPanelHeight())
+					{
+						int tileX = mouseX / CELL_WIDTH;
+						int tileY = ((mouseY - _gui.getScoresPanelHeight()) / CELL_HEIGHT);
+
+						std::vector<int> trackedCells;
+						bool hasMine = _game.openGameCell(tileX, tileY, false, trackedCells);
                     
-                    std::vector<int> trackedCells;
-                    
-                    bool hasMine = _game.openGameCell(tileX, tileY, false, trackedCells);
-                    
-                    if (hasMine)
-                    {
-                        // game over
-                        _currentState = GAMESTATE::GAMEOVER;
-                    }
+						if (hasMine)
+						{
+							// game over
+							_currentState = GAMESTATE::GAMEOVER;
+						}
+					}
                 }
             }
             
